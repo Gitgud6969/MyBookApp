@@ -16,8 +16,6 @@ To get started developing right away:
 
 ## Architecture
 
-I tried to make my code easy to read with my tree like structure
-
 ```bash
 ├── CONTRIBUTING.md
 ├── README.md - This file.
