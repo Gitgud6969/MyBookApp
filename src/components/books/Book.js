@@ -27,8 +27,10 @@ export default function Book(props) {
               width: 128,
               height: 193,
               backgroundImage: `url(${
-                props.bookdata ? props.bookdata.imageLinks.thumbnail : null
-              })`
+                props.bookdata.imageLinks && props.bookdata.imageLinks.thumbnail
+                  ? `${props.bookdata.imageLinks.thumbnail}`
+                  : `http://via.placeholder.com/128x193?text=No%20Cover`
+              })`,
             }}
           ></div>
           <div className="book-shelf-changer">
@@ -47,7 +49,11 @@ export default function Book(props) {
           </div>
         </div>
         <div className="book-title">{props.bookdata.title}</div>
-        <div className="book-authors">{props.bookdata.authors}</div>
+        <div className="book-authors">
+          {Array.isArray(props.bookdata.authors)
+            ? props.bookdata.authors.join(", ")
+            : props.bookdata.authors}
+        </div>
       </div>
     </div>
   );
