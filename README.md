@@ -1,6 +1,11 @@
 ## Welcome to my BookApp!
 
 This is my submission for the code project my Reads App.
+On the Dashboard you can see all the Books currently saved for your token in their Bookshelfes. By clicking on the add symbol of each book you can change their bookschelf.
+
+When you select search in the Navbar you will be redirected to the search tool. Here you cann search for Books even when they are represented in your bookshelfes. And add Books that are not currently in any bookshelf.
+
+Have fun!
 
 ## TL;DR
 
