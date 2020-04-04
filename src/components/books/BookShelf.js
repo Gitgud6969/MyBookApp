@@ -5,7 +5,7 @@ import { BookContext } from "../../store/BookContext";
 
 export default function BookShelf(props) {
   const [shelfBook, setShelfBooks] = useState();
-  const bookContextData = useContext(BookContext);
+  let bookContextData = useContext(BookContext);
 
   async function fetchMyAPI() {
     // Gets all Books and saves them in my Context Array

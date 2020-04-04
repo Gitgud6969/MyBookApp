@@ -10,7 +10,6 @@ export default function Book(props) {
     props.update();
   }
 
-  //
   function clickHandler(e) {
     let UpdatedBookData = { ...bookData, shelf: e.target.value };
     Update(UpdatedBookData);

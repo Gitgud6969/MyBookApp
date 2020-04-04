@@ -5,7 +5,7 @@ import { BookContext } from "../store/BookContext";
 
 const SearchPage = () => {
   const [listItems, setListItems] = useState();
-  const bookContextData = useContext(BookContext);
+  let bookContextData = useContext(BookContext);
   const [filteredListItems, setFilteredListItems] = useState();
   const [listItemsToRender, setListItemsToRender] = useState();
   const [input, setInput] = useState();
