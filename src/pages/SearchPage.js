@@ -6,7 +6,6 @@ import { BookContext } from "../store/BookContext";
 const SearchPage = () => {
   const [listItems, setListItems] = useState();
   let bookContextData = useContext(BookContext);
-  const [filteredListItems, setFilteredListItems] = useState();
   const [listItemsToRender, setListItemsToRender] = useState();
   const [error, setError] = useState(false);
   const inputRef = useRef();
@@ -15,17 +14,17 @@ const SearchPage = () => {
   useEffect(() => {
     try {
       let res0 =
-        bookContextData.arrayState &&
+        listItems &&
         listItems.filter(
           (o) => !bookContextData.arrayState.find((o2) => o.id === o2.id)
         );
       let res1 =
-        bookContextData.arrayState &&
+        res0 &&
         bookContextData.arrayState.filter((book) =>
           listItems.find((searchItem) => book.id === searchItem.id)
         );
-      // setFilteredListItems is the final result which has to be mapped to display
-      res0 && setFilteredListItems(res1.concat(res0));
+      const filteredItems = res0 && res1.concat(res0);
+      filteredItems && RenderTheList(filteredItems);
     } catch {
       setError(true);
     }
@@ -33,24 +32,24 @@ const SearchPage = () => {
 
   // this function handles the Search from the API ,catches Errors and returns a Array for the compare Function
   function searchBooks() {
-    if (inputRef.current.value) {
+    if (inputRef.current.value !== "") {
       setError(false);
       try {
-        inputRef.current.value && fetchMyAPI().then(Search());
+        fetchMyAPI().then(Search());
         async function Search() {
           const response = await search(inputRef.current.value);
-          return setListItems(response);
+          if (response.error) {
+            setError(true);
+          } else {
+            bookContextData.arrayState && setListItems(response);
+          }
         }
       } catch (error) {
-        console.log("error search");
         setError(true);
       }
     } else {
-      console.log(listItems, "else");
-      setTimeout(() => {
-        setListItems(null);
-        setFilteredListItems(null);
-      }, 1000);
+      setError(true);
+      setListItemsToRender();
     }
   }
 
@@ -61,18 +60,18 @@ const SearchPage = () => {
     );
   }
 
-  // --------- Here i got the same issue with useEffects dependencies as in BookShelf.js if im adding the function it creates an infinite loop ----------
   // Mapping the result from the compare function into a variable
-  useEffect(() => {
-    const ListItemsFiltered = filteredListItems
-      ? filteredListItems.map((v, i) => (
+
+  function RenderTheList(props) {
+    const ListItemsFiltered = props
+      ? props.map((v, i) => (
           <li key={i}>
-            <Book id={v.id} bookdata={v} update={searchBooks} />
+            <Book id={v.id} bookdata={v} updateSearch={searchBooks} />
           </li>
         ))
       : null;
     return setListItemsToRender(ListItemsFiltered);
-  }, [filteredListItems]);
+  }
 
   return (
     <>
@@ -83,10 +82,6 @@ const SearchPage = () => {
             placeholder="Search by title or author"
             ref={inputRef}
             onChange={searchBooks}
-            // onChange={(e) => {
-            //   console.log(inputRef.current.value);
-            //   // setInput(e.target.value);
-            // }}
           />
         </div>
       </div>
@@ -95,9 +90,9 @@ const SearchPage = () => {
           <h2 className="bookshelf-title">AllBooks</h2>
           <div className="bookshelf-books">
             {/* destination for the mapped Books */}
-            {listItems !== null ? (
+            {listItemsToRender && (
               <ol className="books-grid">{listItemsToRender}</ol>
-            ) : null}
+            )}
             {error && <h1>Sorry no results!</h1>}
           </div>
         </div>

@@ -7,13 +7,13 @@ export default function Book(props) {
   //This function calls the Updatefunction from the Api
   async function Update(UpdatedBookData) {
     await update(UpdatedBookData, UpdatedBookData.shelf);
-    props.update();
+    props.update && props.update();
+    props.updateSearch && props.updateSearch();
   }
 
   function clickHandler(e) {
     let UpdatedBookData = { ...bookData, shelf: e.target.value };
     Update(UpdatedBookData);
-    props.updateSearch && props.updateSearch();
   }
 
   return (
