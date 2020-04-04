@@ -7,18 +7,16 @@ export default function BookShelf(props) {
   const [shelfBook, setShelfBooks] = useState();
   let bookContextData = useContext(BookContext);
 
+  fetchMyAPI();
+
   async function fetchMyAPI() {
     // Gets all Books and saves them in my Context Array
-    await getAll().then(response =>
+    await getAll().then((response) =>
       bookContextData.dispatchArrayState(response)
     );
   }
-
-  // When the Component loads this function fires
-  useEffect(() => {
-    fetchMyAPI();
-  }, []);
-
+  // ---- i cannot resolve the warning with the dependency here because
+  //    it creates either an loop if im adding the fetchMyApi to the effect or my bookShelf are not re mapping itself on change -----
   // every time my Context Data changes the BookShelf re maps itself
   useEffect(() => {
     const shelfBooks =
