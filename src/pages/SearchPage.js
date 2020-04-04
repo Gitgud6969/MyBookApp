@@ -48,8 +48,11 @@ const SearchPage = () => {
         setError(true);
       }
     } else {
-      setError(true);
-      setListItemsToRender();
+      setTimeout(() => {
+        setError(true);
+        setListItemsToRender();
+        setListItems();
+      }, 1000);
     }
   }
 
